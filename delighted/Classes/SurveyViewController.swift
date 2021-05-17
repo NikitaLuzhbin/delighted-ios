@@ -340,6 +340,11 @@ public class SurveyViewController: UIViewController, DelightedPageViewController
         // Update comment text and save to API
         session.surveyResponse.comment = commentTextView.text
         session.saveSurveyResponse()
+
+        if let rating = session.surveyResponse.score {
+            NotificationCenter.default.post(name: .delightedRating,
+                                            object: rating)
+        }
         
         // Hide close button on view controll and add on to navigation controller
         // This keeps close button static between view controller pushes

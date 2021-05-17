@@ -220,7 +220,7 @@ import UIKit
         
         // Making a new window for navigation controller
         // This is needed so that Delighted can force portrait
-        window.windowLevel = .normal
+        window.windowLevel = .alert
         window.isHidden = false
         window.makeKeyAndVisible()
         window.backgroundColor = Colors.clear
