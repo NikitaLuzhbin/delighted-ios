@@ -10,12 +10,14 @@ struct Example {
 }
 
 enum Section: Int {
-    case surveyTypes = 0, other
-    
+    case surveyTypes = 0, additionalScales, other
+
     var title: String {
         switch self {
         case .surveyTypes:
             return "Survey Types"
+        case .additionalScales:
+            return "Additional Scales"
         case .other:
             return "Other"
         }
@@ -23,13 +25,13 @@ enum Section: Int {
 }
 
 class ExamplesViewController: UITableViewController {
-    @IBAction func unwindToExamples(segue:UIStoryboardSegue) { }
-    
+    @IBAction func unwindToExamples(segue: UIStoryboardSegue) { }
+
     @IBOutlet var examplesTableView: UITableView!
-    
+
     public var selectedExample: Example?
 
-    let examples: [Section:[Example]] = [
+    let examples: [Section: [Example]] = [
         .surveyTypes: [
             Example(
                 label: "NPS",
@@ -41,11 +43,15 @@ class ExamplesViewController: UITableViewController {
             ),
             Example(
                 label: "CES",
-                delightedID: "mobile-sdk-lLP3R1ZrvjLVTBEL"
+                delightedID: "mobile-sdk-knM3lJ5zGBEraZG8"
             ),
             Example(
                 label: "5-star",
                 delightedID: "mobile-sdk-KOXlnq0hBwViN9Nu"
+            ),
+            Example(
+                label: "PMF",
+                delightedID: "mobile-sdk-Tk5WTarzkYd5uCTG"
             ),
             Example(
                 label: "Smileys",
@@ -54,6 +60,20 @@ class ExamplesViewController: UITableViewController {
             Example(
                 label: "Thumbs",
                 delightedID: "mobile-sdk-bdN0fT9GZpXsMqxI"
+            ),
+            Example(
+                label: "eNPS",
+                delightedID: "mobile-sdk-cJmG8vTg0CDPazwF"
+            )
+        ],
+        .additionalScales: [
+            Example(
+                label: "CSAT (3-point scale)",
+                delightedID: "mobile-sdk-LCTlXgXo7XAoIKog"
+            ),
+            Example(
+                label: "CES (5-point scale)",
+                delightedID: "mobile-sdk-lLP3R1ZrvjLVTBEL"
             )
         ],
         .other: [
@@ -141,13 +161,13 @@ class ExamplesViewController: UITableViewController {
             )
         ]
     ]
-    
+
     func getExample(indexPath: IndexPath) -> Example {
         return examples[Section(rawValue: indexPath.section)!]![indexPath.row]
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return examples.count;
+        return examples.count
     }
 
     // Section label
@@ -155,12 +175,12 @@ class ExamplesViewController: UITableViewController {
                                 section: Int) -> String? {
         return Section(rawValue: section)!.title
     }
-    
+
     // Number of examples in section
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return examples[Section(rawValue: section)!]!.count
     }
-    
+
     // Given an indexPath (section, row), construct a cell
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = examplesTableView.dequeueReusableCell(withIdentifier: "ExampleCell", for: indexPath)
@@ -178,7 +198,7 @@ class ExamplesViewController: UITableViewController {
         selectedExample = getExample(indexPath: indexPath)
         self.performSegue(withIdentifier: "demoSurvey", sender: examplesTableView.cellForRow(at: indexPath))
     }
-    
+
     // Before transitioning, set the example that'll be demo'd
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "demoSurvey" {
